@@ -12,7 +12,7 @@ class Institute(db.Model):
 	email = db.Column(db.String(120),unique = True,nullable = False)
 	password = db.Column(db.String(60),nullable=False)
 	scope = db.Column(db.String(200),nullable=False)
-	ins_img = db.Column(db.String(20),nullable = False)
+	ins_img = db.Column(db.String(20), default='default.jpg')
 	posts = db.relationship('Event',backref='host',lazy=True)
 
 	def __repr__(self):
@@ -24,7 +24,7 @@ class Event(db.Model):
 	title = db.Column(db.String(70),unique = True,nullable = False)
 	short_disc = db.Column(db.String(150),unique = True,nullable = False)
 	long_disc = db.Column(db.String(2000),unique = True,nullable=False)
-	poster = db.Column(db.String(20),nullable = False )
+	poster = db.Column(db.String(20), default='default.jpg')
 	reg_last_date = db.Column(db.DateTime , nullable=False)
 	event_date = db.Column(db.DateTime , nullable=False)
 	ins_id = db.Column(db.Integer,db.ForeignKey('institute.id'),nullable=False)

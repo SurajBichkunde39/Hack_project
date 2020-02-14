@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-   {% for event in events %}
+
+    <h1 class="mb-3">{{ institute.ins_name }}</h1>
+    <img class="float-left" src="{{ url_for('static' , filename = 'ins_profiles/'+institute.ins_img) }}">
+
+    {% for event in events %}
        <article class="media content-section">
-       	{% if event.host.ins_id %}
-          	<img class="rounded_circle article-img" src="{{ url_for('static' , filename = 'ins_profiles/'+event.host.ins_img) }}">
-        {% else %}
-        	<img class="rounded_circle article-img" src="{{ url_for('static' , filename = 'ins_profiles/default.jpg') }}">
-        {% endif %}
+          <img class="rounded_circle article-img" src="{{ url_for('static' , filename = 'ins_profiles/'+event.host.ins_img) }}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('institute_info', ins_id = event.host.id ) }}">{{ event.host.ins_name }}</a>
               <small class="text-muted">{{ event.reg_last_date.strftime('%Y-%m-%d') }}</small>
             </div>
             <h2><a class="article-title" href="{{ url_for('event',event_id=event.id) }}">{{ event.title }}</a></h2>

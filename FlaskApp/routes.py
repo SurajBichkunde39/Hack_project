@@ -7,7 +7,8 @@ from flask_login import login_user,current_user,logout_user,login_required
 @app.route('/')
 @app.route('/home')
 def home():
-	return render_template('home.html')
+	events = Event.query.all()
+	return render_template('home.html',events=events)
 
 
 @app.route('/about')
@@ -73,3 +74,15 @@ def account():
 @app.route('/logout')
 def logout():
 	return redirect(url_for('home'))
+
+
+@app.route("/event/<int:event_id>")
+def event(event_id):
+		event = Event.query.get_or_404(event_id)
+		return render_template('event.html',title=event.title , event = event)
+
+@app.route("/institute_info/<int:ins_id>")
+def institute_info(ins_id):
+	institute = Institute.query.get_or_404(ins_id)
+	events = Event.query.filter_by(host=institute).order_by(Event.event_date.desc())
+	return render_template('institute_info.html',title=institute.ins_name,institute=institute , events = events)

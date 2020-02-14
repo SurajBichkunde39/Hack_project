@@ -35,7 +35,7 @@ class CreatePostForm(FlaskForm):
 	title = StringField('Title',validators = [DataRequired() ,Length(min=2,max=30)])
 	short_disc = StringField('Short Discription',validators = [DataRequired() ,Length(min=2,max=100)])
 	long_disc = TextAreaField('Long Discription',)
-	poster = FileField('Event Poster' , validators=[DataRequired() , FileAllowed(['jpg','png'])])
+	poster = FileField('Event Poster' , validators=[FileAllowed(['jpg','png'])])
 	reg_last_date = DateField('Last Date For Registration',validators=[DataRequired()])
 	event_date = DateField('Event Date',validators=[DataRequired()])
 	submit = SubmitField('Post Event')

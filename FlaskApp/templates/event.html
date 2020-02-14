@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<article class="media content-section">
+  <img class = "rounded_circle article-img" src="{{ url_for('static' , filename = 'ins_profiles/'+event.host.ins_img) }} ">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{{ url_for('institute_info' , ins_id = event.host.id ) }}">{{ event.host.ins_name }}</a>
+    <h2 class="article-title">{{ event.title }}</h2>
+    <h3 class="article-content">{{ event.short_disc }}</h3>
+    <h4 class="text-muted">Last Date for Registration: {{ event.reg_last_date.strftime('%Y-%m-%d') }}</h4>
+    <h4 class="text-muted">Date Of Event: {{ event.event_date.strftime('%Y-%m-%d') }}</h4>
+    <figure class="figure">
+    <img src="{{ url_for('static',filename='event_posters/'+event.poster) }}" class="figure-img img-fluid rounded">
+    </figure>
+    <h5 class="text-muted">EVENT INFO IN DETAIL</h5>
+    <p class="article-content">{{ event.long_disc }}</p>
+   
+    </div>
+  </div>
+</article>
+{% endblock content %}
