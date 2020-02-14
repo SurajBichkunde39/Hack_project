@@ -15,11 +15,12 @@ class RegistrationForm(FlaskForm):
 class InfoForm(FlaskForm):
 	ins_name = StringField('Institute Name',validators=[DataRequired(),Length(min=2,max=50)])
 	admin_name = StringField('Admin Name',validators=[DataRequired()])
+	address = StringField('Address',validators=[DataRequired()])
 	mobile_no = StringField('Mobile no.', validators=[DataRequired()])
 	no_of_students = IntegerField('No of Students' , validators=[DataRequired()])
 	no_of_staff = IntegerField('No of Staff Members' , validators=[DataRequired()])
 	scope = StringField('Overall Scope of Students')
-	ims_img = FileField('Picture of Institute' , validators=[DataRequired() , FileAllowed(['jpg','png'])])
+	ins_img = FileField('Picture of Institute' , validators=[FileAllowed(['jpg','png'])])
 	submit = SubmitField('Save Profile')
 
 	def validate_phone(self, mobile_no):

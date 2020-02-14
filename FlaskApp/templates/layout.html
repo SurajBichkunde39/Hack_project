@@ -10,7 +10,11 @@
 
     <link rel="stylesheet" type="text/css" href="../static/main.css">
 
-	<title>Concat</title>
+	{% if title %}
+        <title>Concat - {{ title }}</title>
+    {% else %}
+        <title>Concat</title>
+    {% endif %}
 	</head>
 	<body>
 		
@@ -27,16 +31,16 @@
 	          	</button>
 	          	<div class="collapse navbar-collapse" id="navbarToggle">
 	            	<div class="navbar-nav mr-auto">
-	             	 	<a class="nav-item nav-link" href="#">Home</a>
-	              		<a class="nav-item nav-link" href="#">About Us</a>
+	             	 	<a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+	              		<a class="nav-item nav-link" href="{{ url_for('about') }}">About Us</a>
 	            	</div>
 	            <!-- Right side of nav bar -->
 	            	<div class="navbar-nav">
-	                	<a class="nav-item nav-link" href="#">New Event</a>
-	                	<a class="nav-item nav-link" href="#">Account</a>
-	                	<a class="nav-item nav-link" href="#">Logout</a>
-	                	<a class="nav-item nav-link" href="#">Login</a>
-	                	<a class="nav-item nav-link" href="#">Register</a>
+	                	<a class="nav-item nav-link" href="{{ url_for('create_post') }}">New Event</a>
+	                	<a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
+	                	<a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+	                	<a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+	                	<a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
 	            	</div>
 	          	</div>
 	        </div>

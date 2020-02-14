@@ -91,16 +91,16 @@
                 </div>
 
                 <div class="form-group">
-                    {{ form.ims_img.label(class="form-control-label") }}
-                    {% if form.ims_img.errors %}
-                        {{ form.ims_img(class="form-control form-control-lg is-invalid") }}
+                    {{ form.ins_img.label(class="form-control-label") }}
+                    {% if form.ins_img.errors %}
+                        {{ form.ins_img(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.ims_img.errors %}
+                            {% for error in form.ins_img.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.ims_img(class="form-control form-control-lg") }}
+                        {{ form.ins_img(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
