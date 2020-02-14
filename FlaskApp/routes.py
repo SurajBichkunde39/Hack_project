@@ -48,5 +48,5 @@ def create_post():
 	form = CreatePostForm()
 	if form.validate_on_submit():
 		return redirect(url_for('home'))
-	return render_template('post.html',form=form)
+	return render_template('create_post.html',form=form)
 
