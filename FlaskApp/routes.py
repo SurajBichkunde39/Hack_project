@@ -6,14 +6,13 @@ from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , Res
 @app.route('/home')
 def home():
 	return render_template('home.html')
-<<<<<<< HEAD
+
 
 
 @app.route('/about')
 def about():
 	return render_template('about.html')
-=======
->>>>>>> c3891ce842ed5a90c5fe6688cf52dbd373d3228c
+
 
 @app.route('/login')
 def login():
