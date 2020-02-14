@@ -5,7 +5,7 @@ from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , Res
 @app.route('/')
 @app.route('/home')
 def home():
-	return render_template(url_for('home.html') , form = form)
+	return render_template('home.html' , form = form)
 
 @app.route('/login')
 def login():
