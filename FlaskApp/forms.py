@@ -50,6 +50,12 @@ class RespondForm(FlaskForm):
 	pass
 
 
+class ResponseForm(FlaskForm):
+	name = StringField('Student Name',validators=[DataRequired()])
+	contact = StringField('Contact',validators=[DataRequired()])
+	add = SubmitField('ADD')
+	submit = SubmitField('Submit')
+
 
 class LoginForm(FlaskForm):
 	email = StringField('Email',
