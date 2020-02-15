@@ -1,8 +1,13 @@
 from datetime import datetime
-from FlaskApp import db,app
+from FlaskApp import db,app , login_manager
+from flask_login import UserMixin
+
+@login_manager.user_loader
+def load_user(ins_id):
+	return Institute.query.get(int(ins_id))
 
 
-class Institute(db.Model):
+class Institute(db.Model , UserMixin):
 	id = db.Column(db.Integer , primary_key = True)
 	ins_name = db.Column(db.String(70),unique = True,nullable = False)
 	admin_name = db.Column(db.String(50),nullable = False)

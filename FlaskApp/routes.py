@@ -2,6 +2,7 @@ from flask import render_template , url_for , flash , redirect , request , abort
 from FlaskApp import app, db, bcrypt 
 from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm , ResponseForm
 from FlaskApp.models import Institute, Event
+from flask_login import login_user , current_user , logout_user
 
 @app.route('/')
 @app.route('/home')
@@ -17,13 +18,22 @@ def about():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-	
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
 	form = LoginForm()
+	if form.validate_on_submit():
+		ins = Institute.query.filter_by(email=form.email.data).first()
+		if ins and bcrypt.check_password_hash(ins.password,form.password.data):
+			login_user(ins,remember=form.remember.data)
+			return redirect(url_for('home'))
+		else:
+			flash(f'wrong mail id or password','danger')
 	return render_template('login.html', title='Login', form=form)
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-	
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		session['email_id']=form.email.data
@@ -34,6 +44,8 @@ def register():
 
 @app.route('/info',methods=['GET','POST'])
 def info():
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
 	form = InfoForm()
 	if form.validate_on_submit():
 		global email_id,hashed_password
@@ -72,6 +84,7 @@ def account():
 
 @app.route('/logout')
 def logout():
+	logout_user()
 	return redirect(url_for('home'))
 
 

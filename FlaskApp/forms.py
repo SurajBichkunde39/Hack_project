@@ -5,13 +5,21 @@ from wtforms import StringField , PasswordField , SubmitField , BooleanField , T
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired , Length , Email , EqualTo , ValidationError
 import phonenumbers
-
-
+from FlaskApp.models import Institute
+ 
 class RegistrationForm(FlaskForm):
 	email = StringField('Email', validators = [DataRequired() , Email()])
 	password = PasswordField('Password' , validators=[DataRequired()])
 	confirm_password =  PasswordField('Conform Password', validators=[DataRequired() , EqualTo('password')])
 	submit = SubmitField('Varify Email')
+
+
+	def validate_email(self , email):
+		ins = Institute.query.filter_by(email=email.data).first()
+		if ins:
+			raise ValidationError('That email is already taken')
+
+
 
 class InfoForm(FlaskForm):
 	ins_name = StringField('Institute Name',validators=[DataRequired(),Length(min=2,max=50)])
@@ -31,6 +39,12 @@ class InfoForm(FlaskForm):
 				raise ValueError()
 		except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
 				raise ValidationError('Invalid mobile_no number')
+
+
+	def validate_email(self , ins_name):
+		ins = Institute.query.filter_by(ins_name=email.data).first()
+		if ins:
+			raise ValidationError('That instute name is already taken is already taken')
 
 class CreatePostForm(FlaskForm):
 	title = StringField('Title',validators = [DataRequired() ,Length(min=2,max=30)])
