@@ -1,4 +1,4 @@
-from flask import render_template , url_for , flash , redirect , request , abort
+from flask import render_template , url_for , flash , redirect , request , abort, session
 from FlaskApp import app, db, bcrypt 
 from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm
 from FlaskApp.models import Institute, Event
@@ -27,9 +27,14 @@ def login():
 def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		institute = Institute(email=form.email.data, password=hashed_password)
-		db.session.add(institute)
+		# global email_id,hashed_password
+		# hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		# email_id = form.email.data
+		# institute = Institute(email=form.email.data, password=hashed_password)
+		# db.session.add(institute)
+		session['email_id']=form.email.data
+		session['hashed_password']=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		
 		flash('Your account has been created! Please complete your profile.','success')
 		return redirect(url_for('info'))
 	return render_template('register.html' ,title='Register', form = form)
@@ -38,7 +43,8 @@ def register():
 def info():
 	form = InfoForm()
 	if form.validate_on_submit():
-		institute = Institute(ins_name=form.ins_name.data,admin_name=form.admin_name.data,address=form.address.data,mobile_no=form.mobile_no.data,no_of_students=form.no_of_students.data,no_of_staff=form.no_of_staff.data,scope=form.scope.data,ins_img=form.ins_img.data)
+		global email_id,hashed_password
+		institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,address=form.address.data,mobile_no=form.mobile_no.data,no_of_students=form.no_of_students.data,no_of_staff=form.no_of_staff.data,scope=form.scope.data,ins_img=form.ins_img.data)
 		db.session.add(institute)
 		db.session.commit()
 		flash('Information updated, you can now login.','success')
