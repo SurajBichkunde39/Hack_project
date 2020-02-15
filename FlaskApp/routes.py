@@ -2,7 +2,6 @@ from flask import render_template , url_for , flash , redirect , request , abort
 from FlaskApp import app, db, bcrypt 
 from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm
 from FlaskApp.models import Institute, Event
-from flask_login import login_user,current_user,logout_user,login_required
 
 @app.route('/')
 @app.route('/home')
@@ -18,23 +17,17 @@ def about():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
+	
 	form = LoginForm()
-	if form.validate_on_submit():
-		return redirect(url_for('register'))
-	return render_template('login.html',title='Login', form = form)
+	return render_template('login.html', title='Login', form=form)
 
 @app.route('/register',methods=['GET','POST'])
 def register():
+	
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		# global email_id,hashed_password
-		# hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		# email_id = form.email.data
-		# institute = Institute(email=form.email.data, password=hashed_password)
-		# db.session.add(institute)
 		session['email_id']=form.email.data
 		session['hashed_password']=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		
 		flash('Your account has been created! Please complete your profile.','success')
 		return redirect(url_for('info'))
 	return render_template('register.html' ,title='Register', form = form)

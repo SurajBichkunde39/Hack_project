@@ -1,11 +1,12 @@
 from datetime import datetime
-from FlaskApp import db
+from FlaskApp import db,app
+
 
 class Institute(db.Model):
 	id = db.Column(db.Integer , primary_key = True)
 	ins_name = db.Column(db.String(70),unique = True,nullable = False)
-	admin_name = db.Column(db.String(50),unique = True,nullable = False)
-	address = db.Column(db.String(100),unique = True,nullable=False)
+	admin_name = db.Column(db.String(50),nullable = False)
+	address = db.Column(db.String(100),nullable=False)
 	mobile_no = db.Column(db.Integer,unique = True,nullable=False)
 	no_of_students = db.Column(db.Integer,nullable=False)
 	no_of_staff = db.Column(db.Integer,nullable=False)
@@ -21,9 +22,9 @@ class Institute(db.Model):
 
 class Event(db.Model):
 	id = db.Column(db.Integer , primary_key = True)
-	title = db.Column(db.String(70),unique = True,nullable = False)
-	short_disc = db.Column(db.String(150),unique = True,nullable = False)
-	long_disc = db.Column(db.String(2000),unique = True,nullable=False)
+	title = db.Column(db.String(70),nullable = False)
+	short_disc = db.Column(db.String(150),nullable = False)
+	long_disc = db.Column(db.String(2000),nullable=False)
 	poster = db.Column(db.String(20), default='default.jpg')
 	reg_last_date = db.Column(db.DateTime , nullable=False)
 	event_date = db.Column(db.DateTime , nullable=False)
