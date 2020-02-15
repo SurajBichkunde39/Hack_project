@@ -1,6 +1,6 @@
 from flask import render_template , url_for , flash , redirect , request , abort, session
 from FlaskApp import app, db, bcrypt 
-from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm
+from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm , ResponseForm
 from FlaskApp.models import Institute, Event
 from flask_login import login_user,current_user,logout_user,login_required
 
@@ -92,3 +92,14 @@ def institute_info(ins_id):
 	institute = Institute.query.get_or_404(ins_id)
 	events = Event.query.filter_by(host=institute).order_by(Event.event_date.desc())
 	return render_template('institute_info.html',title=institute.ins_name,institute=institute , events = events)
+
+
+@app.route("/response" , methods=['GET','POST'])
+def response():
+	form = ResponseForm()
+	if form.validate_on_submit() and 'submit' in request.form:
+		flash('Your Responce has benn sent to the event host institute')
+		return redirect(url_for('home'))
+	elif form.validate_on_submit() and 'add' in request.form:
+		return redirect(url_for('response'))
+	return render_template('response.html',title="Send Response",form=form)
