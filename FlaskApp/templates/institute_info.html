@@ -1,9 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-
-    <h1 class="mb-3">{{ institute.ins_name }}</h1>
-    <img class="float-left" src="{{ url_for('static' , filename = 'ins_profiles/'+institute.ins_img) }}">
-
+    <img src="{{ url_for('static' , filename = 'ins_profiles/'+institute.ins_img) }}">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4"> {{ institute.ins_name }}</h1>
+        <p class="lead">Admin Name : {{ institute.admin_name }}</p>
+        <p class="lead">Email : {{ institute.email }}</p>
+        <p class="lead">Mobile No : {{ institute.mobile_no }}</p>
+        <p class="lead">Total No of Students : {{ institute.no_of_students }}</p>
+        <p class="lead">Number of Staff Members : {{ institute.no_of_staff }}</p>
+      </div>
+  </div>
     {% for event in events %}
        <article class="media content-section">
           <img class="rounded_circle article-img" src="{{ url_for('static' , filename = 'ins_profiles/'+event.host.ins_img) }}">

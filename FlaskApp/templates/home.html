@@ -1,5 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
+  <form class="form-inline md-form mr-auto mb-4">
+  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+  <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Search by
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Institute Name</a>
+    <a class="dropdown-item" href="#">Event Name</a>
+    <a class="dropdown-item" href="#">Tags</a>
+  </div>
+</div>
+ <button class="btn aqua-gradient btn-rounded btn-sm my-0 ml-2" type="submit">Search</button>
+</form>
+
    {% for event in events %}
        <article class="media content-section">
        	{% if event.host.ins_id %}

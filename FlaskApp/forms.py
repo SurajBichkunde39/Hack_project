@@ -41,8 +41,8 @@ class InfoForm(FlaskForm):
 				raise ValidationError('Invalid mobile_no number')
 
 
-	def validate_email(self , ins_name):
-		ins = Institute.query.filter_by(ins_name=email.data).first()
+	def validate_email(self , email):
+		ins = Institute.query.filter_by(email=email.data).first()
 		if ins:
 			raise ValidationError('That instute name is already taken is already taken')
 
@@ -83,6 +83,10 @@ class RequestResetForm(FlaskForm):
 		validators = [DataRequired() , Email()])
 	submit = SubmitField('Request Password Reset ')
 
+	def validate_email(self , email):
+		ins = Institute.query.filter_by(email=email.data).first()
+		if not ins:
+			raise ValidationError('This Email is not registered')
 
 class ResetPasswordForm(FlaskForm):
 	password = PasswordField('Password' , validators=[DataRequired()])

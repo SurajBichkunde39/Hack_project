@@ -7,7 +7,7 @@ from flask_login import login_user , current_user , logout_user
 @app.route('/')
 @app.route('/home')
 def home():
-	events = Event.query.all()
+	events = Event.query.order_by(Event.reg_last_date.desc())
 	return render_template('home.html',events=events)
 
 
@@ -25,6 +25,7 @@ def login():
 		ins = Institute.query.filter_by(email=form.email.data).first()
 		if ins and bcrypt.check_password_hash(ins.password,form.password.data):
 			login_user(ins,remember=form.remember.data)
+			flash(f'You have successfully Logged in','success')
 			return redirect(url_for('home'))
 		else:
 			flash(f'wrong mail id or password','danger')
@@ -57,10 +58,11 @@ def info():
 	return render_template('info.html', title='Info', form = form)
 
 
-@app.route('/request_reset',methods=['GET'])
+@app.route('/request_reset',methods=['GET','POST'])
 def request_reset():
 	form = RequestResetForm()
 	if form.validate_on_submit():
+		flash(f'An Email has been sent to your account with further instructions.','success')
 		return redirect(url_for('reset_password'))
 	return render_template('request_reset.html', title='Reset Password', form = form)
 
@@ -75,6 +77,9 @@ def reset_password():
 def create_post():
 	form = CreatePostForm()
 	if form.validate_on_submit():
+		eve1 = Event(title=form.title.data,short_disc=form.short_disc.data,long_disc=form.long_disc.data,reg_last_date=form.reg_last_date.data,event_date=form.event_date.data,ins_id=current_user.id)
+		db.session.add(eve1)
+		db.session.commit()
 		return redirect(url_for('home'))
 	return render_template('create_post.html', title='Create Event', form=form)
 
