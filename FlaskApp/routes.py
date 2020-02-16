@@ -46,20 +46,41 @@ def register():
 		return redirect(url_for('info'))
 	return render_template('register.html' ,title='Register', form = form)
 
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _,f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/ins_profiles',picture_fn)
+    
+    output_size = (125,125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
 @app.route('/info',methods=['GET','POST'])
 def info():
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
 	form = InfoForm()
 	if form.validate_on_submit():
-		global email_id,hashed_password
-		institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,
+		if form.ins_img.data:
+			picture_file = save_picture(form.ins_img.data)
+			institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,
+					address=form.address.data,mobile_no=form.mobile_no.data,ins_img=picture_file,no_of_students=form.no_of_students.data,
+					no_of_staff=form.no_of_staff.data,scope=form.scope.data)
+
+		else:
+			institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,
 					address=form.address.data,mobile_no=form.mobile_no.data,no_of_students=form.no_of_students.data,
 					no_of_staff=form.no_of_staff.data,scope=form.scope.data)
 		db.session.add(institute)
 		db.session.commit()
 		flash('Information updated, you can now login.','success')
 		return redirect(url_for('login'))
+	
 	return render_template('info.html', title='Info', form = form)
 
 
@@ -104,6 +125,17 @@ def event(event_id):
 		event = Event.query.get_or_404(event_id)
 		return render_template('event.html',title=event.title , event = event)
 
+@app.route("/event/<int:event_id>/delete", methods=['POST'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.host != current_user:
+        abort(403)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Your event has been deleted!','success')
+    return redirect(url_for('home'))
+
 @app.route("/institute_info/<int:ins_id>")
 def institute_info(ins_id):
 	institute = Institute.query.get_or_404(ins_id)
@@ -115,7 +147,7 @@ def institute_info(ins_id):
 def response():
 	form = ResponseForm()
 	if form.validate_on_submit() and 'submit' in request.form:
-		flash('Your Responce has benn sent to the event host institute')
+		flash('Your Response has benn sent to the event host institute')
 		return redirect(url_for('home'))
 	elif form.validate_on_submit() and 'add' in request.form:
 		return redirect(url_for('response'))
