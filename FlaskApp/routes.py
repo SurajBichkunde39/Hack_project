@@ -1,3 +1,4 @@
+import os , secrets
 from flask import render_template , url_for , flash , redirect , request , abort, session
 from PIL import Image
 from FlaskApp import app, db, bcrypt , mail
@@ -112,7 +113,7 @@ def request_reset():
 
 
 @app.route('/reset_password/<token>',methods=['GET','POST'])
-def reset_password():
+def reset_password(token):
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
 	ins = Institute.verify_reset_token(token)

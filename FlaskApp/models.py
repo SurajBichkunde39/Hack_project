@@ -37,7 +37,8 @@ class Institute(db.Model , UserMixin):
 			ins_id = s.loads(token)['ins_id']
 		except:
 			return None 
-		return Institute.query.get(user_id)
+		return Institute.query.get(ins_id)
+
 
 
 class Event(db.Model):
