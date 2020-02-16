@@ -1,4 +1,5 @@
 from datetime import datetime
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from FlaskApp import db,app , login_manager
 from flask_login import UserMixin
 
@@ -23,6 +24,20 @@ class Institute(db.Model , UserMixin):
 
 	def __repr__(self):
 		return f"Institute('{self.ins_name}')"
+
+
+	def get_reset_token(self,expires_sec=1800):
+		s = Serializer(app.config['SECRET_KEY'] , expires_sec)
+		return s.dumps({'ins_id':self.id}).decode('utf-8')
+
+	@staticmethod
+	def verify_reset_token(token):
+		s = Serializer(app.config['SECRET_KEY'])
+		try:
+			ins_id = s.loads(token)['ins_id']
+		except:
+			return None 
+		return Institute.query.get(user_id)
 
 
 class Event(db.Model):

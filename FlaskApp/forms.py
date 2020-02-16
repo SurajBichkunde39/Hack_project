@@ -11,7 +11,7 @@ class RegistrationForm(FlaskForm):
 	email = StringField('Email', validators = [DataRequired() , Email()])
 	password = PasswordField('Password' , validators=[DataRequired()])
 	confirm_password =  PasswordField('Conform Password', validators=[DataRequired() , EqualTo('password')])
-	submit = SubmitField('Varify Email')
+	submit = SubmitField('Verify Email')
 
 
 	def validate_email(self , email):
@@ -29,7 +29,7 @@ class InfoForm(FlaskForm):
 	no_of_students = IntegerField('No of Students' , validators=[DataRequired()])
 	no_of_staff = IntegerField('No of Staff Members' , validators=[DataRequired()])
 	scope = StringField('Overall Scope of Students')
-	ins_img = FileField('Picture of Institute' , validators=[FileAllowed(['jpg','png'])])
+	ins_img = FileField('Picture of Institute' , validators=[FileAllowed(['jpg','png','jpeg'])])
 	submit = SubmitField('Save Profile')
 
 	def validate_phone(self, mobile_no):
