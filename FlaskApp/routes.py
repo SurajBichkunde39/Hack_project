@@ -1,8 +1,9 @@
 from flask import render_template , url_for , flash , redirect , request , abort, session
+from PIL import Image
 from FlaskApp import app, db, bcrypt 
 from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , ResetPasswordForm , InfoForm , CreatePostForm , ResponseForm
 from FlaskApp.models import Institute, Event
-from flask_login import login_user , current_user , logout_user
+from flask_login import login_user , current_user , logout_user , login_required
 
 @app.route('/')
 @app.route('/home')
@@ -25,6 +26,8 @@ def login():
 		ins = Institute.query.filter_by(email=form.email.data).first()
 		if ins and bcrypt.check_password_hash(ins.password,form.password.data):
 			login_user(ins,remember=form.remember.data)
+			next_page = request.args.get('next')
+			return redirect(next_page) if next_page else redirect(url_for('home'))
 			flash(f'You have successfully Logged in','success')
 			return redirect(url_for('home'))
 		else:
@@ -50,7 +53,9 @@ def info():
 	form = InfoForm()
 	if form.validate_on_submit():
 		global email_id,hashed_password
-		institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,address=form.address.data,mobile_no=form.mobile_no.data,no_of_students=form.no_of_students.data,no_of_staff=form.no_of_staff.data,scope=form.scope.data,ins_img=form.ins_img.data)
+		institute = Institute(ins_name=form.ins_name.data, password=session['hashed_password'],email=session['email_id'], admin_name=form.admin_name.data,
+					address=form.address.data,mobile_no=form.mobile_no.data,no_of_students=form.no_of_students.data,
+					no_of_staff=form.no_of_staff.data,scope=form.scope.data)
 		db.session.add(institute)
 		db.session.commit()
 		flash('Information updated, you can now login.','success')
@@ -77,13 +82,14 @@ def reset_password():
 def create_post():
 	form = CreatePostForm()
 	if form.validate_on_submit():
-		eve1 = Event(title=form.title.data,short_disc=form.short_disc.data,long_disc=form.long_disc.data,reg_last_date=form.reg_last_date.data,event_date=form.event_date.data,ins_id=current_user.id)
+		eve1 = Event(title=form.title.data,short_disc=form.short_disc.data,long_disc=form.long_disc.data,poster = form.poster.data,reg_last_date=form.reg_last_date.data,event_date=form.event_date.data,ins_id=current_user.id)
 		db.session.add(eve1)
 		db.session.commit()
 		return redirect(url_for('home'))
 	return render_template('create_post.html', title='Create Event', form=form)
 
 @app.route('/account',methods=['GET','POST'])
+@login_required
 def account():
 	return render_template('account.html', title='Account')
 
