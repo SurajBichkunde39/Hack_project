@@ -1,19 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
   <form class="form-inline md-form mr-auto mb-4">
-  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-  <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Search by
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Institute Name</a>
-    <a class="dropdown-item" href="#">Event Name</a>
-    <a class="dropdown-item" href="#">Tags</a>
-  </div>
-</div>
- <button class="btn aqua-gradient btn-rounded btn-sm my-0 ml-2" type="submit">Search</button>
-</form>
+   <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+   <div class="dropdown dropright"> 
+     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     Search by
+     </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Institute Name</a>
+      <a class="dropdown-item" href="#">Event Name</a>
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Tags
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+       <a class="dropdown-item" href="#">Engineering</a>
+       <a class="dropdown-item" href="#">Polythcnics</a>
+       <a class="dropdown-item" href="#">5th to 10th</a>
+      </div>
+     </button>
+   </div>
+   </div>
+   <button class="btn aqua-gradient btn-rounded btn-sm my-0 ml-2" type="submit">Search</button>
+  </form>
 
    {% for event in events %}
        <article class="media content-section">
