@@ -6,6 +6,7 @@ from FlaskApp.forms import LoginForm , RegistrationForm , RequestResetForm , Res
 from FlaskApp.models import Institute, Event
 from flask_login import login_user , current_user , logout_user , login_required
 from flask_mail import Message
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 @app.route('/')
 @app.route('/home')
@@ -36,6 +37,31 @@ def login():
 			flash(f'wrong mail id or password','danger')
 	return render_template('login.html', title='Login', form=form)
 
+
+def get_varification_token(email,expires_sec=1800):
+	s = Serializer(app.config['SECRET_KEY'] , expires_sec)
+	return s.dumps({'email':email}).decode('utf-8')
+
+def verify_mail_token(token):
+	s = Serializer(app.config['SECRET_KEY'])
+	try:
+		eamil = s.loads(token)['email']
+	except:
+		return None 
+	return Institute.query.get(ins_id)
+
+
+def send_varification_email(email):
+	token = get_varification_token(email)
+	msg = Message('Password Reset Request ' , sender = 'noreply@ssbwork.com' ,
+	recipients=[email] )
+
+	msg.body = f'''Welcome to Concat.Click the following :
+{ url_for('reset_password' , token=token , _external=True) }
+If you did nok make this request then simply ignore this email.and no change will done. '''
+	mail.send(msg)
+
+
 @app.route('/register',methods=['GET','POST'])
 def register():
 	if current_user.is_authenticated:
@@ -44,8 +70,9 @@ def register():
 	if form.validate_on_submit():
 		session['email_id']=form.email.data
 		session['hashed_password']=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		send_varification_email(session['email_id'])
 		flash('Your account has been created! Please complete your profile.','success')
-		return redirect(url_for('info'))
+		return redirect(url_for('login'))
 	return render_template('register.html' ,title='Register', form = form)
 
 
@@ -62,10 +89,14 @@ def save_picture(form_picture):
 
     return picture_fn
 
-@app.route('/info',methods=['GET','POST'])
-def info():
+@app.route('/info/<token>',methods=['GET','POST'])
+def info(token):
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
+	comming_mail = verify_mail_token(token)
+	if comming_mail != session['email']:
+		flash('That is invalid or expired token')
+		return redirect(url_for('register'))
 	form = InfoForm()
 	if form.validate_on_submit():
 		if form.ins_img.data:
